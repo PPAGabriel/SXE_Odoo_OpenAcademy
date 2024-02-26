@@ -245,6 +245,15 @@ Una vez realizados estos cambios, reiniciamos el contenedor y actualizamos la ba
 
 ![img8.png](media%2Fimg8.png)
 
+Si se desea crear un nuevo registro, usamos el boton "NUEVO":
+
+![img9.png](media%2Fimg9.png)
+
+En este al añadir nombre y descripción, se añade un nuevo registro a la tabla.
+![img10.png](media%2Fimg10.png)
+
+Si todo esta corectamente configurado, se podrá visualizar el registro en la tabla en nuestro IDE.
+![img11.png](media%2Fimg11.png)
 ---
 ## Espero esta información sea de ayuda para ustedes. ¡Hasta la próxima! :smile:
 
