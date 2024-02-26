@@ -6,7 +6,7 @@ Open Academy es un módulo de Odoo que permite a las empresas crear cursos y ses
 
 # Conexion a BD
 
-En el siguiente fraqmento de código se muestra la conexión a la base de datos de Odoo.
+En el siguiente fragmento de código se muestra la conexión a la base de datos de Odoo (haciendo referencia a nuestro Docker Compose).
 
 ```dockerfile
   #servicio gestor de base de datos
