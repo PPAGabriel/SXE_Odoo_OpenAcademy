@@ -4,7 +4,7 @@ En este repositorio, explicaremos cómo hacer uso de OpenAcademy en Odoo.
 
 Open Academy es un módulo de Odoo que permite a las empresas crear cursos y sesiones de formación para sus empleados.
 
-# Conexion a BD
+## Conexion a BD
 
 En el siguiente fragmento de código se muestra la conexión a la base de datos de Odoo (haciendo referencia a nuestro Docker Compose).
 
@@ -45,7 +45,7 @@ Posteriormente, reiniciamos el contenedor para asegurarnos que los cambios se ha
 
 ![img.png](media%2Fimg.png)
 
-# Configuración del Módulo y Creación de una Tabla
+## Configuración del Módulo y Creación de una Tabla
 
 Una vez instalado el módulo, reiniciamos nuestro contenedor, e ingresamos a Odoo y nos dirigimos a la sección de 'Aplicaciones' y buscaremos 'OpenAcademy'.
 
@@ -255,6 +255,150 @@ En este al añadir nombre y descripción, se añade un nuevo registro a la tabla
 Si todo esta corectamente configurado, se podrá visualizar el registro en la tabla en nuestro IDE.
 ![img11.png](media%2Fimg11.png)
 ---
+## Creacion y Visualización de una Segunda Tabla
+
+Para agregar una segunda tabla, se debe seguir el mismo procedimiento que se realizó para la primera tabla. Se debe crear un nuevo modelo en la carpeta 'models' denominada 'tabla_puntos' (por ejemplo), con la siguiente estructura:
+
+```python
+from odoo import fields, models
+
+class TestPuntos(models.Model):
+    _name = "test_points"
+    _description = "Segunda tabla de prueba con puntos"
+
+    namePoints = fields.Char(string="Nombre en Interfaz")
+    points = fields.Integer(string="Puntos en Interfaz")
+```
+
+Posteriormente, se agregamos una etiqueta record en el archivo 'datos.xml' en la carpeta 'data'. En este creamos los campos realacionados con las variables del modelo.
+
+```xml
+<odoo>
+    <data>
+        <record model="test_model" id="openacademy.nombres">
+            <field name="name">Pepe</field> <!-- El nombre debe ser el mismo que la variable del modelo -->
+            <field name="description">50</field> <!--El nombre debe ser el mismo que la variable del modelo-->
+        </record>
+
+        <record model="test_points" id="openacademy.puntos">
+            <field name="namePoints">Usuario1</field> <!-- El nombre debe ser el mismo que la variable del modelo -->
+            <field name="points">8</field> <!--El nombre debe ser el mismo que la variable del modelo-->
+        </record>
+    </data>
+</odoo>
+```
+
+Al reiniciar nuestro contenedor y actualizar la base de datos, podremos visualizar la segunda tabla en la sección de "public -> tables".
+
+![img12.png](media%2Fimg12.png)
+
+Ahora bien, para visualizar esta tabla en el OpenAcademy, se debe modificar el archivo 'views.xml' de la siguiente manera:
+
+* Agregar la vista de la tabla en la sección de 'explicit list view definition'.
+
+```xml
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="openacademy.list">
+      <field name="name">openacademy list Nombres</field>
+      <field name="model">test_model</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="description"/>
+        </tree>
+      </field>
+    </record>
+
+        <record model="ir.ui.view" id="openacademy.list2">
+      <field name="name">openacademy list Puntos</field>
+      <field name="model">test_points</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="namePoints"/>
+          <field name="points"/>
+        </tree>
+      </field>
+    </record>
+    ...
+```
+
+* Agregar la acción de la tabla en la sección de 'actions opening views on models'.
+
+```xml
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="openacademy.action_window">
+      <field name="name">openacademy window</field>
+      <field name="res_model">test_model</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="openacademy.action_window_Points">
+      <field name="name">openacademy Puntos</field>
+      <field name="res_model">test_points</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    ...
+```
+
+* Agregar las tablas en la sección de 'Menu Categories': en pestañas independientes.
+```xml
+    <!-- Top menu item -->
+
+    <menuitem name="openacademy" id="openacademy.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Menu 1" id="openacademy.menu_1" parent="openacademy.menu_root"/>
+    <menuitem name="Nombres" id="openacademy.menu_2" parent="openacademy.menu_root" action="openacademy.action_window"/>
+    <menuitem name="Puntos" id="openacademy.menu_3" parent="openacademy.menu_root" action="openacademy.action_window_Points"/>
+    ...
+```
+
+Con estos cambios, al reiniciar el contenedor y actualizar la base de datos, obtendremos el siguiente resultado:
+
+![img13.png](media%2Fimg13.png)
+
+* Agregar las tablas en una sola pestaña: haciendo efecto de ComboBox.
+
+```xml
+    <!-- menu categories -->
+
+    <menuitem name="Menu 1" id="openacademy.menu_1" parent="openacademy.menu_root"/>
+
+    <!-- actions -->
+
+    <menuitem name="Nombres" id="openacademy.menu_1_list" parent="openacademy.menu_1"
+              action="openacademy.action_window"/>
+
+    <menuitem name="Puntuacion" id="openacademy.menu_1_list_Points" parent="openacademy.menu_1"
+              action="openacademy.action_window_Points"/>
+```
+
+Con estos cambios, al reiniciar el contenedor y actualizar la base de datos, obtendremos el siguiente resultado:
+
+![img14.png](media%2Fimg14.png)
+
+Finalmente, en la carpeta 'Security', se debe modificar el archivo 'ir.model.access.csv' para que se pueda visualizar la tabla en el OpenAcademy.
+
+1. En la posición de 'id': **access_openacademy_openacademy2**.
+2. En la posición de 'model_id': **model_test_points**.
+
+```csv
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_openacademy_openacademy,openacademy.openacademy,model_test_model,base.group_user,1,1,1,1
+access_openacademy_openacademy2,openacademy.openacademy,model_test_points,base.group_user,1,1,1,1
+```
+
+Una vez realizados estos cambios, reiniciamos el contenedor y actualizamos la base de datos. Nos dirigimos a la sección de 'Aplicaciones' y buscamos 'OpenAcademy'. Nos encontraremos con la segunda tabla creada.
+
+![img15.png](media%2Fimg15.png)
+
+---
+
 ## Espero esta información sea de ayuda para ustedes. ¡Hasta la próxima! :smile:
 
 
