@@ -6,10 +6,8 @@ class TestModel(models.Model):
     _name = "test_model"
     _description = "Modelo de prueba"
 
-    name = fields.Char(string="Nombre")
-    description = fields.Text(string="Descripcion")
-
-
+    name = fields.Char(string="Nombre en Interfaz")
+    description = fields.Text(string="Descripcion en Interfaz")
 
 # from odoo import models, fields, api
 

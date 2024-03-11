@@ -4,5 +4,10 @@
             <field name="name">Pepe</field> <!-- El nombre debe ser el mismo que la variable del modelo -->
             <field name="description">50</field> <!--El nombre debe ser el mismo que la variable del modelo-->
         </record>
+
+        <record model="test_points" id="openacademy.puntos">
+            <field name="namePoints">Usuario1</field> <!-- El nombre debe ser el mismo que la variable del modelo -->
+            <field name="points">8</field> <!--El nombre debe ser el mismo que la variable del modelo-->
+        </record>
     </data>
 </odoo>
