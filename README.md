@@ -250,11 +250,13 @@ Si se desea crear un nuevo registro, usamos el boton "NUEVO":
 ![img9.png](media%2Fimg9.png)
 
 En este al añadir nombre y descripción, se añade un nuevo registro a la tabla.
+
 ![img10.png](media%2Fimg10.png)
 
 Si todo esta corectamente configurado, se podrá visualizar el registro en la tabla en nuestro IDE.
+
 ![img11.png](media%2Fimg11.png)
----
+
 ## Creacion y Visualización de una Segunda Tabla
 
 Para agregar una segunda tabla, se debe seguir el mismo procedimiento que se realizó para la primera tabla. Se debe crear un nuevo modelo en la carpeta 'models' denominada 'tabla_puntos' (por ejemplo), con la siguiente estructura:
